@@ -91,6 +91,7 @@ mount_media_disk() {
 
 create_media_folders() {
   mkdir -p "$MEDIA_MOUNT"/{tv,movies,anime,downloads,books,manga,comics}
+  chown -R 1000:1000 "$MEDIA_MOUNT"
 }
 
 # ---------- Docker & env ----------
@@ -116,6 +117,9 @@ DOWNLOADS=$MEDIA_MOUNT/downloads
 TV=$MEDIA_MOUNT/tv
 MOVIES=$MEDIA_MOUNT/movies
 ANIME=$MEDIA_MOUNT/anime
+BOOKS=$MEDIA_MOUNT/books
+MANGA=$MEDIA_MOUNT/manga
+COMICS=$MEDIA_MOUNT/comics
 EOF
     else
       error_msg "$ENV_FILE is required. Create it manually and rerun."

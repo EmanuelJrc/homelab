@@ -5,10 +5,8 @@ secrets/
 
 # Media storage
 /mnt/
-downloads/
 
 # Logs
 *.log
 
 Screenshot1.png
-radarr_setup.mkd

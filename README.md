@@ -1,5 +1,7 @@
 # Media Server — Automated Installer & Docker Stack
 
+![Homepage](image.png)
+
 A fully automated, production‑grade media server setup powered by Docker, designed for clean organization, easy redeployment, and long‑term maintainability.
 
 This project includes:
@@ -142,26 +144,6 @@ The wizard will guide you through:
 - Creating media folders
 - Installing Docker
 - Deploying all stacks
-
----
-
-# 🧩 Environment Variables
-
-Copy `.env.example` to `.env`:
-
-```bash
-cp .env.example .env
-```
-
-The installer will generate `/docker/.env` automatically if missing.
-
-This file defines:
-
-- User IDs
-- Timezone
-- Appdata root
-- Media root
-- All media subfolders
 
 ---
 

@@ -1,0 +1,20 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+headerStyle: underlined # default style
+
+providers:
+  openweathermap: ${OPENWEATHERMAP_API_KEY}
+  weatherapi: weatherapiapikey
+
+layout:
+  Media Viewer:
+    style: row
+    columns: 1
+    header: false
+
+  Media:
+    style: row
+    columns: 3
+    header: false

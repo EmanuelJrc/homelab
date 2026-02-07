@@ -1,0 +1,79 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Media Viewer:
+    - Jellyfin:
+        icon: jellyfin.png
+        href: ${JELLYFIN_URL}
+        description: Media server
+        widget:
+          type: jellyfin
+          url: ${JELLYFIN_URL}
+          key: ${JELLYFIN_API_KEY}
+          enableBlocks: true
+          enableNowPlaying: true
+          enableMediaControl: true
+          enableUser: true
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: false # optional, defaults to true
+
+- Media:
+    - Radarr:
+        icon: radarr.png
+        href: ${RADARR_URL}
+        description: Movie management
+        widget:
+          type: radarr
+          url: ${RADARR_URL}
+          key: ${RADARR_API_KEY}
+
+    - Sonarr:
+        icon: sonarr.png
+        href: ${SONARR_URL}
+        description: Series management
+        widget:
+          type: sonarr
+          url: ${SONARR_URL}
+          key: ${SONARR_API_KEY}
+
+    - Kavita:
+        icon: kavita.png
+        href: ${KAVITA_URL}
+        description: Book reader
+        widget:
+          type: kavita
+          url: ${KAVITA_URL}
+          username: ${KAVITA_USERNAME}
+          password: ${KAVITA_PASSWORD}
+          key: kavitaapikey # Optional, e.g. if not using username and password
+
+    - Jellyseer:
+        icon: jellyseerr.png
+        href: ${JELLYSEERR_URL}
+        description: Jellyfin statistics dashboard
+        widget:
+          type: jellyseerr
+          url: ${JELLYSEERR_URL}
+          key: ${JELLYSEERR_API_KEY}
+
+    - qBittorrent:
+        icon: qbittorrent.png
+        href: ${QBITTORRENT_URL}
+        description: Torrent client
+        widget:
+          type: qbittorrent
+          url: ${QBITTORRENT_URL}
+          username: ${QBITTORRENT_USERNAME}
+          password: ${QBITTORRENT_PASSWORD}
+          enableLeechProgress: false # optional, defaults to false
+          enableLeechSize: false # optional, defaults to false
+
+    - Prowlarr:
+        icon: prowlarr.png
+        href: ${PROWLARR_URL}
+        description: Indexer manager
+        widget:
+          type: prowlarr
+          url: ${PROWLARR_URL}
+          key: ${PROWLARR_API_KEY}

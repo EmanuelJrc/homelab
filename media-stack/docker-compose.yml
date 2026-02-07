@@ -1,0 +1,119 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    ports:
+      - 8989:8989
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/sonarr:/config
+      - ${TV}:/tv
+      - ${ANIME}:/anime
+      - ${DOWNLOADS}:/downloads
+      - ${MEDIA_ROOT}:/mnt
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr
+    container_name: radarr
+    ports:
+      - 7878:7878
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/radarr:/config
+      - ${MOVIES}:/movies
+      - ${ANIME}:/anime
+      - ${DOWNLOADS}:/downloads
+      - ${MEDIA_ROOT}:/mnt
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr
+    container_name: prowlarr
+    ports:
+      - 9696:9696
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/prowlarr:/config
+    restart: unless-stopped
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/jellyfin:/config
+      - ${MEDIA_ROOT}:/mnt
+    devices:
+      # OPTIONAL – only if you want hardware transcoding (Intel iGPU)
+      - /dev/dri:/dev/dri
+    ports:
+      - 8096:8096
+      - 8920:8920 # for HTTPS
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/bazarr:/config
+      - ${TV}:/tv
+      - ${MOVIES}:/movies
+      - ${ANIME}:/anime
+      - ${DOWNLOADS}:/downloads
+      - ${MEDIA_ROOT}:/mnt
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  kavita:
+    image: jvmilazz0/kavita:latest
+    container_name: kavita
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/kavita:/config
+      - ${COMICS}:/comics
+      - ${MANGA}:/manga
+      - ${BOOKS}:/books
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    init: true
+    container_name: jellyseerr
+    environment:
+      LOG_LEVEL: debug
+      TZ: ${TZ}
+      PORT: 5055
+    ports:
+      - 5055:5055
+    volumes:
+      - ${APPDATA}/jellyseerr:/app/config
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    restart: unless-stopped

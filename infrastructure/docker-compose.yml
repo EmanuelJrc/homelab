@@ -1,0 +1,71 @@
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SERVERURL=majhome.duckdns.org
+      - SERVERPORT=51820
+      - PEERS=phone,laptop,family1,family2
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0
+    volumes:
+      - ${APPDATA}/wireguard:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    environment:
+      TZ: ${TZ}
+      FTLCONF_dns_listeningMode: "ALL"
+      DNSMASQ_USER: root
+    volumes:
+      - ${APPDATA}/pihole:/etc/pihole
+      - ${APPDATA}/pihole-dnsmasq:/etc/dnsmasq.d
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8081:80/tcp"
+    restart: unless-stopped
+
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: npm
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - ${APPDATA}/npm/data:/data
+      - ${APPDATA}/npm/letsencrypt:/etc/letsencrypt
+
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - AUTH=none
+    volumes:
+      - ${APPDATA}/code-server:/config
+      - ${APPDATA}/code-server-workspace:/workspace
+    ports:
+      - 8443:8443

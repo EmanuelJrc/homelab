@@ -1,0 +1,53 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/bookmarks
+
+- Entertainment:
+    - Youtube:
+        - abbr: YT
+          href: https://youtube.com/
+          icon: youtube.png
+          description: Videos and content streaming
+    - Reddit:
+        - abbr: RE
+          href: https://reddit.com/
+          icon: reddit.png
+          description: Community discussions and news
+    - Twitch:
+        - abbr: TW
+          href: https://twitch.tv/
+          icon: twitch.png
+          description: Live streaming platform
+
+- Developer:
+    - Github:
+        - abbr: GH
+          href: https://github.com/
+          icon: github.png
+          description: Code hosting platform
+    - Linkedin:
+        - abbr: LI
+          href: https://linkedin.com/
+          icon: linkedin.png
+          description: Professional networking
+    - Visual Studio Code:
+        - abbr: VSC
+          href: http://vscode.home/
+          icon: visual-studio-code.png
+          description: Code editor by Microsoft
+- AI Bots:
+    - ChatGPT:
+        - abbr: CGPT
+          href: https://chat.openai.com/
+          icon: chatgpt.png
+          description: AI language model by OpenAI
+    - Copilot:
+        - abbr: CP
+          href: https://copilot.microsoft.com/
+          icon: si-microsoft
+          description: AI-powered code completion by Microsoft
+    - Claude:
+        - abbr: CL
+          href: https://claude.ai/
+          icon: si-anthropic
+          description: AI assistant by Anthropic

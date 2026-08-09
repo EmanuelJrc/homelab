@@ -2,10 +2,62 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
+    restart: unless-stopped
+
     ports:
-      - 3000:3000
+      - "3000:3000"
+
     volumes:
       - ${APPDATA}/homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${STORAGE_PATH}:/mnt/storage
+
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: homepage.home,192.168.100.90,192.168.100.90:3000,localhost:3000
+      HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_ALLOWED_HOSTS}
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    restart: unless-stopped
+
+    ports:
+      - "3001:3001"
+
+    volumes:
+      - ${APPDATA}/uptime-kuma:/app/data
+
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+
+    ports:
+      - "8090:8090"
+
+    volumes:
+      - ${APPDATA}/beszel:/app/data
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+
+    network_mode: host
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${APPDATA}/beszel-agent:/var/lib/beszel-agent
+      - /sys/class/hwmon/hwmon1/temp1_input:/cpu_temp:ro
+      - ${STORAGE_PATH}:/extra-filesystems/storage:ro
+
+    environment:
+      LISTEN: ${BESZEL_LISTEN}
+      KEY: ${BESZEL_AGENT_KEY}
+      HUB_URL: ${BESZEL_HUB_URL}
+      HWMON_PATH: ${BESZEL_HWMON_PATH}
+      CPU_TEMP_PATH: ${BESZEL_CPU_TEMP_PATH}
+      NET_INTERFACE: ${BESZEL_NET_INTERFACE}
+
+networks:
+  default:
+    driver: bridge

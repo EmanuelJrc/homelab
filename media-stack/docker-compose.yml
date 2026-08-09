@@ -2,6 +2,7 @@ services:
   sonarr:
     image: lscr.io/linuxserver/sonarr
     container_name: sonarr
+    restart: unless-stopped
     ports:
       - 8989:8989
     environment:
@@ -14,11 +15,11 @@ services:
       - ${ANIME}:/anime
       - ${DOWNLOADS}:/downloads
       - ${MEDIA_ROOT}:/mnt
-    restart: unless-stopped
 
   radarr:
     image: lscr.io/linuxserver/radarr
     container_name: radarr
+    restart: unless-stopped
     ports:
       - 7878:7878
     environment:
@@ -31,11 +32,11 @@ services:
       - ${ANIME}:/anime
       - ${DOWNLOADS}:/downloads
       - ${MEDIA_ROOT}:/mnt
-    restart: unless-stopped
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr
     container_name: prowlarr
+    restart: unless-stopped
     ports:
       - 9696:9696
     environment:
@@ -44,11 +45,14 @@ services:
       TZ: ${TZ}
     volumes:
       - ${APPDATA}/prowlarr:/config
-    restart: unless-stopped
 
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - 8096:8096
+      - 8920:8920 # for HTTPS
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -59,14 +63,13 @@ services:
     devices:
       # OPTIONAL – only if you want hardware transcoding (Intel iGPU)
       - /dev/dri:/dev/dri
-    ports:
-      - 8096:8096
-      - 8920:8920 # for HTTPS
-    restart: unless-stopped
 
   bazarr:
     image: lscr.io/linuxserver/bazarr
     container_name: bazarr
+    restart: unless-stopped
+    ports:
+      - 6767:6767
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -78,9 +81,6 @@ services:
       - ${ANIME}:/anime
       - ${DOWNLOADS}:/downloads
       - ${MEDIA_ROOT}:/mnt
-    ports:
-      - 6767:6767
-    restart: unless-stopped
 
   kavita:
     image: jvmilazz0/kavita:latest
@@ -98,22 +98,28 @@ services:
       - "5000:5000"
     restart: unless-stopped
 
-  jellyseerr:
-    image: ghcr.io/fallenbagel/jellyseerr:latest
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
     init: true
-    container_name: jellyseerr
-    environment:
-      LOG_LEVEL: debug
-      TZ: ${TZ}
-      PORT: 5055
+    restart: unless-stopped
     ports:
       - 5055:5055
+    environment:
+      - LOG_LEVEL = info
+      - TZ = ${TZ}
+      - PUID = ${PUID}
+      - PGID = ${PGID}
+      - PORT = 5055
     volumes:
-      - ${APPDATA}/jellyseerr:/app/config
+      - ${APPDATA}/seerr:/app/config
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
       timeout: 3s
       interval: 15s
       retries: 3
-    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge

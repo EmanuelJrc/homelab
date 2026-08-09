@@ -2,6 +2,7 @@ services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
+    restart: unless-stopped
     ports:
       - 8080:8080
       - 6881:6881
@@ -14,4 +15,3 @@ services:
     volumes:
       - ${APPDATA}/qbittorrent:/config
       - ${MEDIA_ROOT}:/mnt
-    restart: unless-stopped
